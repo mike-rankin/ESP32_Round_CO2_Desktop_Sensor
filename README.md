@@ -1,5 +1,5 @@
 # ESP32_Round_CO2_Desktop_Sensor
-Arduino ESP32 based CO2 sensor using a 1.28" round display
+This project is an Arduino ESP32 based CO2 sensor using a 1.28" round display. So far I've used oled and tft displays in square and rectagular shapes so this was an excuse to try a round one. The 3d printed enclosure is a friction fit with one screw holding the board in place. A fair amount of pressure is need to insert and remove the usb connector so this should help keep everything in place.
 
 ![IMG_2840](https://user-images.githubusercontent.com/4991664/201361869-9736ed54-078c-4139-8183-581eda1a4178.jpg)
 ![Description](https://user-images.githubusercontent.com/4991664/201390204-22bda8af-138a-4a41-b515-01be6c6c1ad9.png)
