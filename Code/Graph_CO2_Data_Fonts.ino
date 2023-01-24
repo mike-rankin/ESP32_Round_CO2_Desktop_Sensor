@@ -10,6 +10,10 @@
 #include <BH1750.h>              //Christopher Laws version
 #include "ClosedCube_HDC1080.h"  //Closed Cube version
 #include <CST816S.h>             //https://github.com/fbiego/CST816S
+#include "NotoSansMonoSCB20.h"
+#include "NotoSansBold36.h"
+#include "Final_Frontier_28.h"
+
 
 #define White     0xFFFF
 #define Green     0x07E0
@@ -21,7 +25,7 @@
 #define LightBlue 0x867D
 #define Red       0xF800
 
-#define temperaure_offset 13.5
+#define temperaure_offset 16.1  //13.5
 #define TFT_BL 26
 
 CST816S touch(13, 14, 33, 9);  // sda, scl, rst, int)
@@ -101,7 +105,7 @@ void inActiveState()
 void drawCO2_Graph() 
 { 
   static uint32_t prev = 0;
-  if ( millis() - prev < 500 ) {  // update every second?
+  if ( millis() - prev < 60000 ) {  // update every second?
     return;
   }
   prev = millis();
@@ -189,16 +193,48 @@ void drawCO2_Text()
 
   sgp.IAQmeasure();  //Grab latest sample
   value = sgp.eCO2;
+
+
+  
   if (value > 999) value = 999;
-  co2_Value = value;
+  int sum = 0;
+  //co2_Value = value;
+
+  //Shows down the updates
+  
+  for(int i=0; i<100; i++)
+  {
+   sum = sum + value;
+   delay(2);
+  }
+  int result = sum/100;
+  co2_Value = result;
+  
 
   sprite.fillRect(50, 45, 150, 60, Black); //Black out old CO2 value
   sprite.setTextColor(White, Black);
-  sprite.drawString(co2_Value, 75, 50, 6);
+    sprite.loadFont(NotoSansBold36);
+    sprite.drawString(co2_Value, 90, 50);
+  //sprite.drawString(co2_Value, 75, 50, 6);
+    sprite.unloadFont(); 
+  
   sprite.drawString("ppm", 165, 75, 2);
   sprite.setTextColor(LightBlue, Black);
   sprite.drawString("eCO2", 100, 95, 2);
   sprite.pushSprite(0, 0);
+
+  /*
+  float get_battery_voltage(){
+  
+  delay(2);
+  int sum = 0;
+  for(int i=0; i<1000; i++){
+    sum = sum + analogRead(ADC_PIN);
+  }
+  int result = sum/1000;
+  return float(result) * (1.437);
+  }
+  */
 }
 
 
@@ -220,8 +256,16 @@ void drawTemp_Hum()
   Temperature = (hdc1080.readTemperature() - temperaure_offset);
   Humidity = (hdc1080.readHumidity());
   sprite.setTextColor(White, Black);
-  sprite.drawString(Temperature, 40, 180, 4);
-  sprite.drawString(Humidity, 140, 180, 4);
+  
+    sprite.fillRect(40, 180, 160, 20, Black); //Black out old CO2 value
+    sprite.loadFont(NotoSansMonoSCB20);
+  //sprite.drawString(Temperature, 40, 180, 4);
+  //sprite.drawString(Humidity, 140, 180, 4);
+    sprite.drawString(Temperature, 40, 180);
+    sprite.drawString(Humidity, 140, 180);   
+  
+    sprite.unloadFont();
+  
   sprite.drawString("'C", 65, 205, 2);
   sprite.drawString("%H", 165, 205, 2);
 }
